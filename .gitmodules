@@ -1,0 +1,6 @@
+[submodule "Images"]
+	path = Images
+	url = https://github.com/WallauBioinfo/Images
+[submodule "Modules"]
+	path = Modules
+	url = https://github.com/WallauBioinfo/Modules
