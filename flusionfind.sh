@@ -17,24 +17,36 @@ show_help() {
     echo "  $0 outra_amostra outro_arquivo_R1.fastq"
 }
 
-# Verifica e faz pull dos arquivos SIF do Singularity necessários
-check_and_pull_sif() {
-    for sif_image in "$@"; do
-        if [ ! -f "$sif_image" ]; then
-            echo "Arquivo SIF do Singularity ($sif_image) não encontrado. Fazendo pull..."
-            singularity pull --arch amd64 library://wallaulabs/flufind/"$sif_image"
-        fi
-    done
-}
-
 # Verifica se o número de argumentos está correto
 if [ "$#" -lt 2 ]; then
     show_help
     exit 1
 fi
 
+check_and_pull_sif() {
+    for ((i=0; i<${#sif_images[@]}; i++)); do
+        sif_image="${sif_images[i]}"
+        image="${images[i]}"
+        if [ ! -f "$sif_image" ]; then
+            echo "Arquivo SIF do Singularity ($sif_image) não encontrado. Fazendo pull..."
+            singularity pull --arch amd64 "library://wallaulabs/flufind/${image}"
+        fi
+    done
+}
+
 # Lista de arquivos SIF do Singularity necessários
-sif_images=("irma_1.1.3.sif" "genoflu_1.2.0.sif")
+sif_images=("irma_1.1.3.sif" "genoflu_1.2.0.sif" "nextclade_3.0.0.sif")
+images=("irma:1.1.3" "genoflu:1.2.0" "nextclade:3.0.0")
+
+# # Verifica e faz pull dos arquivos SIF do Singularity necessários
+# check_and_pull_sif() {
+#     for sif_image in "$@"; for images in "$@"; do
+#         if [ ! -f "$sif_image" ]; then
+#             echo "Arquivo SIF do Singularity ($sif_image) não encontrado. Fazendo pull..."
+#             singularity pull --arch amd64 library://wallaulabs/flufind/"$images"
+#         fi
+#     done
+# }
 
 # Verifica e faz pull dos arquivos SIF necessários
 check_and_pull_sif "${sif_images[@]}"
