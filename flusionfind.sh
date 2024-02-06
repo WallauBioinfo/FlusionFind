@@ -64,8 +64,8 @@ else
 fi
 
 ## Concantenar o arquivo consenso
-cat "$output_dir/$sample_name/amended_consensus/*.fa > $output_dir/$sample_name"_consensus.fasta"" 
-fasta_consensus=$sample_name"_consensus.fasta"
+cat $output_dir/$sample_name/amended_consensus/*.fa > $output_dir/$sample_name"_consensus.fasta"
+fasta_consensus=$output_dir/$sample_name"_consensus.fasta"
 
 # Verifica que genomas de influenza foram detectados
 if [ -e $fasta_consensus ]; then
