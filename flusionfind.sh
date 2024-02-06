@@ -38,16 +38,6 @@ check_and_pull_sif() {
 sif_images=("irma_1.1.3.sif" "genoflu_1.2.0.sif" "nextclade_3.0.0.sif")
 images=("irma:1.1.3" "genoflu:1.2.0" "nextclade:3.0.0")
 
-# # Verifica e faz pull dos arquivos SIF do Singularity necessários
-# check_and_pull_sif() {
-#     for sif_image in "$@"; for images in "$@"; do
-#         if [ ! -f "$sif_image" ]; then
-#             echo "Arquivo SIF do Singularity ($sif_image) não encontrado. Fazendo pull..."
-#             singularity pull --arch amd64 library://wallaulabs/flufind/"$images"
-#         fi
-#     done
-# }
-
 # Verifica e faz pull dos arquivos SIF necessários
 check_and_pull_sif "${sif_images[@]}"
 
@@ -74,7 +64,7 @@ else
 fi
 
 ## Concantenar o arquivo consenso
-cat "$output_dir/$sample_name/amended_consensus/*.fasta > $sample_name"_consensus.fasta"" 
+cat "$output_dir/$sample_name/amended_consensus/*.fa > $output_dir/$sample_name"_consensus.fasta"" 
 fasta_consensus=$sample_name"_consensus.fasta"
 
 # Verifica que genomas de influenza foram detectados
