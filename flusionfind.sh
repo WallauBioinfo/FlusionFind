@@ -84,7 +84,7 @@ if [ -e $fasta_consensus ]; then
 # Executar o Nexclade (task Nexclade)
   echo "Executando Nextclade..." 
   singularity exec nextclade_3.0.0.sif nextclade run \
-   --input-dataset $nexclade_dataset \
+   --input-dataset $nextclade_dataset \
    -O $output_dir/nextclade_output \
    $fasta_consensus
 
