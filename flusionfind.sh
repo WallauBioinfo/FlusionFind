@@ -74,20 +74,18 @@ if [ -e $fasta_consensus ]; then
 # Executar o GenoFLU (Task GenoFlu)
   echo "Executando GenoFLU..."
   mkdir -p $output_dir/genoflu_output
-  cd $output_dir/genoflu_output
-  singularity exec genoflu_1.2.0.sif genoflu.py -f $fasta_consensus > "genoflu.log"
-  cd
-
+  singularity exec genoflu_1.2.0.sif genoflu.py -f $fasta_consensus -n $output_dir/genoflu_output/$sample_name > "$output_dir/genoflu_output/genoflu.log"
+  
 # Criação do banco de dados do Nexclade (Resourses)
   echo "Criando banco de dados de Influenza"
-  nextclade dataset get --name nextstrain/flu/h1n1pdm/ha/CY121680 --output-dir data/Influenza-A
-  nexclade_dataset="data/Influenza-A"
+  singularity exec nextclade_3.0.0.sif nextclade dataset get --name nextstrain/flu/h1n1pdm/ha/CY121680 --output-dir data/Influenza-A
+  nextclade_dataset="data/Influenza-A"
 
 # Executar o Nexclade (task Nexclade)
-  echo "Executando Nexclade..." 
-  nextclade run \
+  echo "Executando Nextclade..." 
+  singularity exec nextclade_3.0.0.sif nextclade run \
    --input-dataset $nexclade_dataset \
-   -O $output_dir/nexclade_output \
+   -O $output_dir/nextclade_output \
    $fasta_consensus
 
 # Finalizando o pipeline
