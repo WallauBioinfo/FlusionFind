@@ -34,6 +34,9 @@ check_and_pull_sif() {
     done
 }
 
+# Blast database
+database="/home/wjunior/validation/resource/database"
+
 # Lista de arquivos SIF do Singularity necessários
 sif_images=("irma_1.1.3.sif" "genoflu_1.2.0.sif" "nextclade_3.0.0.sif")
 images=("irma:1.1.3" "genoflu:1.2.0" "nextclade:3.0.0")
@@ -87,6 +90,12 @@ if [ -e $fasta_consensus ]; then
    --input-dataset $nextclade_dataset \
    -O $output_dir/nextclade_output \
    $fasta_consensus
+
+# Executar o Blast Local (task blast)
+  echo "Executando Blast..."
+  mkdir -p $output_dir/blast_out
+  echo -e query sequence id"\t"subject sequence id"\t"Subject Title"\t"Percentage of identical matches"\t"Number of mismatches"\t"Number of gap openings"\t"Start of alignment in query"\t"End of alignment in query"\t"Start of alignment in subject"\t"End of alignment in Subject"\t"Expect value"\t"Bit score > $output_dir/blast_out/blast_test.txt
+  singularity exec genoflu_1.2.0.sif blastn -query $fasta_consensus -db $database  -outfmt '6 qseqid sseqid stitle pident length mismatch gapopen qstart qend sstart send evalue bitscore' -max_target_seqs 1 -max_hsps 1 -evalue 1e-25 -num_threads 24 >> $output_dir/blast_out/blast_test.txt
 
 # Finalizando o pipeline
   echo "Processo concluído. Os resultados estão em $output_dir"
