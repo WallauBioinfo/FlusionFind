@@ -1,9 +1,11 @@
 # FlusionFind
 
 ## Product Manager:
+
 **Gabriel Wallau**
 
 ## Scrum-master:
+
 ****
 
 ## Título do projeto:
