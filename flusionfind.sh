@@ -36,8 +36,6 @@ check_and_pull_sif() {
     done
 }
 
-# database="/home/wjunior/validation/resource/database/database"
-
 # Lista de arquivos SIF do Singularity necessários
 sif_images=("irma_1.1.3.sif" "genoflu_1.2.0.sif" "nextclade_3.0.0.sif")
 images=("irma:1.1.3" "genoflu:1.2.0" "nextclade:3.0.0")
@@ -85,7 +83,7 @@ if [ -e $fasta_consensus ]; then
   
 # Criação do banco de dados do Nexclade (Resourses)
   echo "Criando banco de dados de Influenza"
-  singularity exec nextclade_3.0.0.sif nextclade dataset get --name nextstrain/flu/h1n1pdm/ha/CY121680 --output-dir data/Influenza-A
+  singularity exec nextclade_3.0.0.sif nextclade dataset get --name nextstrain/flu/h1n1pdm/ha/CY121680 --tag 2024-04-19--07-50-39Z --output-dir data/Influenza-A
   nextclade_dataset="data/Influenza-A"
 
 # Executar o Nexclade (task Nexclade)
