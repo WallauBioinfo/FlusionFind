@@ -3,13 +3,13 @@
 nextflow.enable.dsl=2
 
 params.sample_name = params.sample_name ?: error('Sample name not specified')
-params.database = params.database ?: error('Database path not specified')
+params.database = params.database ?: './database/database'
 params.fastq_r1 = params.fastq_r1 ?: error('FASTQ R1 file not specified')
 
-include { irma } from './irma.nf'
-include { genoflu } from './genoflu.nf'
-include { nextclade } from './nextclade.nf'
-include { blast } from './blast.nf'
+include { irma } from '.Modules/irma/main.nf'
+include { genoflu } from '.Modules/genoflu/main.nf'
+include { nextclade } from '.Modules/nextclade/main.nf'
+include { blast } from '.Modules/blast/main.nf'
 
 workflow {
     channel.fromPath(params.fastq_r1) \
