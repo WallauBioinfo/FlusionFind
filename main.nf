@@ -1,27 +1,21 @@
-#!/usr/bin/env nextflow
-
 nextflow.enable.dsl=2
 
-params.sample_name = params.sample_name ?: error('Sample name not specified')
-params.database = params.database ?: './database/database'
-params.fastq_r1 = params.fastq_r1 ?: error('FASTQ R1 file not specified')
-
-include { irma } from '.Modules/irma/main.nf'
-include { genoflu } from '.Modules/genoflu/main.nf'
-include { nextclade } from '.Modules/nextclade/main.nf'
-include { blast } from '.Modules/blast/main.nf'
+include { irma_process } from './Modules/nf-core/irma/main.nf'
+include { concat_consensus } from './local/get_consensus.nf'
+//include { genoflu } from './Modules/nf-core/genoflu/main.nf'
+//include { create_nextclade_db } from './modules/create_nextclade_db.nf'
+//include { nextclade } from './Modules/nf-core/nextclade/main.nf'
+include { blast } from './Modules/nf-core/blast/main.nf'
 
 workflow {
-    channel.fromPath(params.fastq_r1) \
-        .set { fastq_r1_ch }
-
-    if (params.fastq_r2) {
-        channel.fromPath(params.fastq_r2) \
-            .set { fastq_r2_ch }
+    if (!params.sample_name || !params.database || !params.fastq_r1) {
+        error "Please provide --sample_name, --database, and --fastq_r1"
     }
 
-    irma_output = irma(single_end: !params.fastq_r2, fastq_r1: fastq_r1_ch, fastq_r2: params.fastq_r2 ? fastq_r2_ch : null)
-    genoflu_output = genoflu(input_fasta: irma_output.out.fasta_consensus)
-    nextclade_output = nextclade(input_fasta: genoflu_output.out.fasta_consensus)
-    blast_output = blast(input_fasta: nextclade_output.out.fasta_consensus, database: params.database)
+    irma = irma_process(params.sample_name, params.fastq_r1, params.fastq_r2, params.output_dir)
+    concat = concat_consensus(irma_process.out.fasta, params.sample_name, params.output_dir)
+    //genoflu_result = genoflu(concat, output_dir, params.sample_name)
+    //create_db = create_nextclade_db()
+    //nextclade_result = nextclade(concat, output_dir, params.sample_name)
+    blast_result = blast(concat_consensus.out.consensus, params.database)
 }
