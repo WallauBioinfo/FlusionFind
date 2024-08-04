@@ -4,7 +4,7 @@ process fasta2bed {
     memory '4 GB'
 
     input:
-    path fasta
+    path consensus
     val sample_name
 
     publishDir "${params.output_dir}", mode: 'copy', overwrite: false
@@ -13,8 +13,7 @@ process fasta2bed {
     path "${sample_name}.bed", emit: bed
 
     script:
-
     """
-    cat $fastafile | awk '$0 ~ "^>" {name=substr($0, 2); printf name"\t1\t"} $0 !~ "^>" {printf length($0)"\t"name"\n"}' > ${sample_name}.bed
+    cat ${consensus} | awk '\$0 ~ "^>" {name=substr(\$0, 2); printf name"\\t1\\t"} \$0 !~ "^>" {printf length(\$0)"\\t"name"\\n"}' > ${sample_name}.bed
     """
 }
