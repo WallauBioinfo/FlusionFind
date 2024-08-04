@@ -21,5 +21,5 @@ workflow {
     //nextclade_result = nextclade(concat, output_dir, params.sample_name)
     blast_result = blast(concat_consensus.out.consensus, params.database, params.sample_name)
     fastaTobed = fasta2bed(concat_consensus.out.consensus, params.sample_name)
-    //minimap2_process = minimap2(concat_consensus.out.consensus, params.sample_name, params.fastq_r1, params.fastq_r2)
+    minimap2_process = minimap2(concat_consensus.out.consensus, params.fastq_r1, params.fastq_r2)
 }
