@@ -2,13 +2,14 @@ nextflow.enable.dsl=2
 
 // Import modules
 include { irma_process } from './Modules/nf-core/irma/main.nf'
-// include { concat_consensus } from './local/get_consensus.nf'
-// include { genoflu } from './Modules/nf-core/genoflu/main.nf'
-// include { blast } from './Modules/nf-core/blast/main.nf'
-// include { fasta2bed } from './local/fasta2bed.nf'
-// include { minimap2 } from './Modules/nf-core/minimap2/main.nf'
-// include { samtools_view } from './Modules/nf-core/samtools/main.nf'
-// include { mosdepth_thresholds } from './Modules/nf-core/mosdepth/main.nf'
+include { concat_consensus } from './local/get_consensus.nf'
+include { genoflu } from './Modules/nf-core/genoflu/main.nf'
+include { blast } from './Modules/nf-core/blast/main.nf'
+include { fasta2bed } from './local/fasta2bed.nf'
+include { minimap2 } from './Modules/nf-core/minimap2/main.nf'
+include { samtools_view } from './Modules/nf-core/samtools/main.nf'
+include { mosdepth_thresholds } from './Modules/nf-core/mosdepth/main.nf'
+include { get_summary } from './local/get_summary.nf'
 
 // Pipe that scans the directory and identifies files R1 and R2
 if (params.library == "paired") {
@@ -24,11 +25,12 @@ workflow {
     }
 
     irma = irma_process(reads_ch, params.output_dir)
-    // concat = concat_consensus(irma_process.out.fasta, params.sample_name, params.output_dir)
-    // genoflu_result = genoflu(concat_consensus.out.consensus, params.sample_name)
-    // blast_result = blast(concat_consensus.out.consensus, params.database, params.sample_name)
-    // fastaTobed = fasta2bed(concat_consensus.out.consensus, params.sample_name)
-    // minimap2_process = minimap2(concat_consensus.out.consensus, params.fastq_r1, params.fastq_r2)
-    // samtools_process = samtools_view(minimap2.out.minimap2_sam)
-    // mosdepth_process = mosdepth_thresholds(samtools_view.out.samtools_bam, fasta2bed.out.bed, samtools_view.out.samtools_bam_bai)
+    concat = concat_consensus(reads_ch, irma_process.out.fasta, params.output_dir)
+    genoflu_result = genoflu(reads_ch, concat_consensus.out.consensus)
+    blast_result = blast(reads_ch, concat_consensus.out.consensus, params.database)
+    fastaTobed = fasta2bed(reads_ch, concat_consensus.out.consensus)
+    minimap2_process = minimap2(reads_ch, concat_consensus.out.consensus)
+    samtools_process = samtools_view(reads_ch, minimap2.out.minimap2_sam)
+    mosdepth_process = mosdepth_thresholds(reads_ch, samtools_view.out.samtools_bam, fasta2bed.out.bed, samtools_view.out.samtools_bam_bai)
+    summary = get_summary(reads_ch, blast.out.blast_out, mosdepth_thresholds.out.mosdepth)
 }
