@@ -60,6 +60,7 @@ nextflow main.nf --input_dir <path/to/fastqfiles> --database <path/to/database.t
 ### Download para dados teste
 
 Arquivos [fastq](https://drive.google.com/drive/folders/1U_h1IRzjcqng0r9RT4hDechW3dxwn7QO?usp=sharing)
+
 **Benefícios do Workflow**
 
 - Modularidade: Cada etapa do processo é definida em arquivos separados, permitindo fácil manutenção e reutilização dos componentes.
