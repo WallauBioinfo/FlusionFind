@@ -22,45 +22,43 @@ Este workflow foi desenvolvido para montar e identificar genomas de influenza ut
 
 ### Estrutura do Workflow
 
-nextflow.config: Arquivo de configuração que define os parâmetros globais e especificações de execução dos processos, como o número de CPUs para determinadas tarefas.
-
-main.nf: Script principal que orquestra a execução dos diferentes processos, utilizando canais para passagem de dados entre eles. Inclui os arquivos de processos individuais e define o fluxo de trabalho.
-
-irma.nf: Script de processo para executar o IRMA (Iterative Refinement Meta-Assembler) a fim de montar os genomas de influenza a partir de arquivos FASTQ. Suporta modos single-end e paired-end.
-
-genoflu.nf: Script de processo para executar o GenoFLU, que anota os genomas de influenza montados.
-
-nextclade.nf: Script de processo para executar o Nextclade, ferramenta usada para análise de variações e obtenção de datasets específicos para Influenza.
-
-blast.nf: Script de processo para realizar buscas locais usando BLAST, comparando os genomas montados com um banco de dados especificado.
+* nextflow.config: Arquivo de configuração que define os parâmetros globais e especificações de execução dos processos, como o número de CPUs para determinadas tarefas.
+* main.nf: Script principal que orquestra a execução dos diferentes processos, utilizando canais para passagem de dados entre eles. Inclui os arquivos de processos individuais e define o fluxo de trabalho.
+* irma.nf: Script de processo para executar o IRMA (Iterative Refinement Meta-Assembler) a fim de montar os genomas de influenza a partir de arquivos FASTQ. Suporta modos single-end e paired-end.
+* genoflu.nf: Script de processo para executar o GenoFLU, que anota os genomas de influenza montados.
+* blast.nf: Script de processo para realizar buscas locais usando BLAST, comparando os genomas montados com um banco de dados especificado.
+* minimap2.nf: Script de processo para mapear os reads brutos contra o genoma montado.
+* mosdepth.nf: Script de processo para gerar métricas de qualidade, cobertura vertical e horizontal.
 
 **Fluxo de Trabalho**
 Entrada de Dados: O usuário fornece o nome da amostra, o caminho do banco de dados e os arquivos FASTQ (obrigatórios R1 e opcionalmente R2).
 
 1. Montagem de Genoma com IRMA:
-
 irma.nf: Monta o genoma de influenza a partir dos dados de sequência bruta utilizando o IRMA. Se um arquivo FASTQ R2 for fornecido, o modo paired-end é utilizado; caso contrário, o modo single-end é empregado.
 Os genomas montados são concatenados em um único arquivo de consenso.
-
 2. Anotação com GenoFLU:
-
 genoflu.nf: Anota os genomas montados utilizando o GenoFLU, gerando um relatório de anotação.
-
-3. Análise de Variações com Nextclade:
-
-nextclade.nf: Obtém datasets específicos de Influenza e realiza análises de variações utilizando o Nextclade.
-Identificação com BLAST:
-
-4. blast.nf: Compara os genomas de consenso com um banco de dados local usando BLAST, gerando um relatório detalhado dos resultados.
+3. blast.nf: Compara os genomas de consenso com um banco de dados local usando BLAST, gerando um relatório detalhado dos resultados.
 Execução do Workflow
+
+## Como rodar o pilpeline
 
 Para executar o workflow, use o comando `Nextflow` abaixo, fornecendo os parâmetros necessários:
 
-```bash 
-nextflow run main.nf --sample_name <sample_name> --database <path_to_database> --fastq_r1 <path_to_fastq_R1> [--fastq_r2 <path_to_fastq_R2>]
+### Modo fácil
+
+```bash
+nextflow main.nf --input_dir <path/to/fastqfiles>
 ```
 
-**Benefícios do Workflow** 
+### Modo avançado
+
+```bash
+nextflow main.nf --input_dir <path/to/fastqfiles> --database <path/to/database.tar.gz> --env <docker|singularity|conda> --library <paired|single>
+```
+
+**Benefícios do Workflow**
+
 - Modularidade: Cada etapa do processo é definida em arquivos separados, permitindo fácil manutenção e reutilização dos componentes.
 - Escalabilidade: Utilização eficiente de recursos computacionais, como especificação de número de CPUs para o processo BLAST.
 - Reprodutibilidade: Adoção de Singularity para garantir que as dependências de software sejam consistentes em diferentes execuções e ambientes.
