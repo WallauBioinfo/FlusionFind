@@ -41,6 +41,16 @@ genoflu.nf: Anota os genomas montados utilizando o GenoFLU, gerando um relatóri
 3. blast.nf: Compara os genomas de consenso com um banco de dados local usando BLAST, gerando um relatório detalhado dos resultados.
 Execução do Workflow
 
+## Requerimentos
+
+**Docker**, acesse [aqui](https://docs.docker.com/desktop/) e obtenha informações de como instalar o docker em seu sistema operacional.
+**Nextflow**, acesse [aqui](https://www.nextflow.io/docs/latest/install.html) e obtenha informações para instalar o nextflow no seu ambiente. Certifique-se que está usando a versão 23.04.1.
+**Python**, acesse [aqui](https://www.python.org/downloads/) e saiba como instalar o python em seu ambiente, certifique-se que a versão instalada seja a 3 ou acima e instale também a biblioteca click.
+
+```bash
+pip3 install click
+```
+
 ## Como rodar o pilpeline
 
 Para executar o workflow, use o comando `Nextflow` abaixo, fornecendo os parâmetros necessários:
@@ -60,6 +70,13 @@ nextflow main.nf --input_dir <path/to/fastqfiles> --database <path/to/database.t
 ### Download para dados teste
 
 Arquivos [fastq](https://drive.google.com/drive/folders/1U_h1IRzjcqng0r9RT4hDechW3dxwn7QO?usp=sharing)
+
+## Resources and References
+
+blast
+IRMA
+Minimap2
+samtools
 
 **Benefícios do Workflow**
 
