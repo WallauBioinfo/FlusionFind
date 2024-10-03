@@ -8,7 +8,7 @@ process concat_consensus {
     path fasta
     val output_dir
 
-    publishDir "${params.output_dir}", mode: 'copy', overwrite: false
+    publishDir "${params.output_dir}/${sample_id}", mode: 'copy', overwrite: false
 
     output:
     path "${sample_id}_consensus.fasta", emit: consensus

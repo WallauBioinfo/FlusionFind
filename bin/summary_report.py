@@ -40,7 +40,7 @@ def read_coverage_results(file_path):
 
 def read_blast_results(file_path):
     # Lê o arquivo .gz usando pandas
-    df = pd.read_csv(file_path, sep=r"\s+")
+    df = pd.read_csv(file_path, sep="\t")
     return df
 
 
@@ -83,10 +83,10 @@ def main(blast_file_path, coverage_file_path, output_file):
     blast_results_df = read_blast_results(blast_file_path)
     coverage_results_df = read_coverage_results(coverage_file_path)
 
-    # Realiza o merge dos DataFrames na coluna 'query_sequence_id'
+    # Realiza o merge dos DataFrames na coluna 'Query_sequence_id'
     merged_df = merge_dataframes(blast_results_df, coverage_results_df)
-    merged_df.to_excel(output_file+".xlsx", index=False)
+    merged_df.to_excel(output_file + ".xlsx", index=False)
 
 
 if __name__ == "__main__":
-    main()
+    main()  # Aqui os parênteses foram removidos
