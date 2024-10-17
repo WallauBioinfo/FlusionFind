@@ -43,12 +43,12 @@ Execução do Workflow
 
 ## Requerimentos
 
-**Docker**, acesse [aqui](https://docs.docker.com/desktop/) e obtenha informações de como instalar o docker em seu sistema operacional.
+**Docker**, acesse [aqui](https://docs.docker.com/desktop/) e obtenha informações de como instalar o docker em seu sistema operacional. A versão utilizada para criação foi a 24.0.2.
 **Nextflow**, acesse [aqui](https://www.nextflow.io/docs/latest/install.html) e obtenha informações para instalar o nextflow no seu ambiente. Certifique-se que está usando a versão 23.04.1.
 **Python**, acesse [aqui](https://www.python.org/downloads/) e saiba como instalar o python em seu ambiente, certifique-se que a versão instalada seja a 3 ou acima e instale também a biblioteca click.
 
 ```bash
-pip3 install click
+conda env create -f environment.yml
 ```
 
 ## Como rodar o pilpeline
